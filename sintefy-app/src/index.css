@@ -1,0 +1,84 @@
+.navLinks {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    display: inherit;
+    width: inherit;
+    height: inherit;
+}
+
+.homeIcons {
+    color: 'red';
+}
+
+.sintArticleL {
+    text-align: left;
+    font-family: cursive;
+    margin-top: 8px;
+}
+
+.sintArticleR {
+    text-align: right;
+    font-family: cursive;
+    margin-top: 8px;
+}
+
+.item:hover .MuiTypography-root {
+    color: #2b2d42;
+}
+
+.item:hover .sintArticleL {
+    color: #2f4f4f;
+}
+
+.error{
+    color: red;
+    font-size: 11px;
+}
+
+.depo{
+    border: 1px solid black;
+}
+
+.sendQuote{
+    text-decoration: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    display: inherit;
+    width: inherit;
+    height: inherit;
+    color:darkgreen;
+}
+
+.sendQuote:hover{
+    border-bottom: 1px solid olive;
+}
+
+.sendQuote2{
+    text-decoration: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    display: inherit;
+    width: inherit;
+    height: inherit;
+    color:red;
+}
+
+.sendQuote2:hover{
+    border-bottom: 1px solid red;
+}
+
+
