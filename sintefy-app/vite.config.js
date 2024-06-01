@@ -9,9 +9,9 @@ export default defineConfig({
   ],
   define:{
       companyName:'"Sintefy"',
-      companyAddr:'"East Street, South Park"',
+      companyAddr:'"7, Apple Tool Works, MIDC, Pune"',
       companyEmail:'"admin@sintefy.com"',
-      companyPhno:'"+91 1000000000"',
+      companyPhno:'"+91 9876765432"',
       baseUrl:'"http://localhost:3000/api/"',
   },
 });

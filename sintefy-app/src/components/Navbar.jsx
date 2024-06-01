@@ -50,7 +50,6 @@ export default function Navbar({ scroll, action, loggedIn }) {
   let userInfo;
   if (loggedIn) {
     userInfo = JSON.parse(localStorage.getItem("userData"));
-    // console.log(userInfo);
   }
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -60,8 +59,8 @@ export default function Navbar({ scroll, action, loggedIn }) {
 
   const handleCloseNavMenu = (id) => {
     setAnchorElNav(null);
-    if (id !== "Orders" && action)
-      navigate("/")
+    if (id === "Orders")
+      navigate("/orders")
     else
       scroll(id);
   };
@@ -130,7 +129,7 @@ export default function Navbar({ scroll, action, loggedIn }) {
                   {pages.map((page) => (
                     <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                       <Typography component={'span'} textAlign="center">
-                        {page === "Orders" ? <OrderDropdown/> : page}
+                        {page}
                         </Typography>
                     </MenuItem>
                   ))}
@@ -162,13 +161,13 @@ export default function Navbar({ scroll, action, loggedIn }) {
                     onClick={() => handleCloseNavMenu(page)}
                     sx={{ my: 2, color: 'white', display: 'block' }}
                   >
-                    {page === "Orders" ? <OrderDropdown/> : page}
+                    {page}
                   </Button>
                 ))}
               </Box>
               <Box sx={{ flexGrow: 0 }}>
                 <Typography textAlign="center">
-                  {loggedIn ? <LogoutIcon onClick={handleLogout} /> : <Link className='navLinks' to={'/signin'}>Sign In</Link>}
+                  {loggedIn ? <IconButton onClick={handleLogout} ><LogoutIcon /></IconButton> : <Link className='navLinks' to={'/signin'}>Sign In</Link>}
                 </Typography>
               </Box>
             </Toolbar>

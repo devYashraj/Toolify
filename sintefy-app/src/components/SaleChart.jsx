@@ -1,67 +1,11 @@
 import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
-
-const dataset = [
-  {
-    seoul: 10,
-    month: 'Jan',
-  },
-  {
-    seoul: 28,
-    month: 'Fev',
-  },
-  {
-    seoul: 21,
-    month: 'Mar',
-  },
-  {
-    seoul: 11,
-    month: 'Apr',
-  },
-  {
-    seoul: 12,
-    month: 'May',
-  },
-  {
-    seoul: 13,
-    month: 'June',
-  },
-  {
-    seoul: 7,
-    month: 'July',
-  },
-  {
-    seoul: 24,
-    month: 'Aug',
-  },
-  {
-    seoul: 6,
-    month: 'Sept',
-  },
-  {
-    seoul: 4,
-    month: 'Oct',
-  },
-  {
-    seoul: 7,
-    month: 'Nov',
-  },
-  {
-    seoul: 24,
-    month: 'Dec',
-  },
-];
-
+import { Typography } from '@mui/material';
 const valueFormatter = (value) => `${value}`;
 
 const chartSetting = {
-  yAxis: [
-    {
-      label: 'Orders',
-    },
-  ],
-  series: [{ dataKey: 'monthlyorders', label: 'Monthly Orders 2024', valueFormatter }],
+  series: [{ dataKey: 'monthlyorders', valueFormatter }],
   height: 300,
   sx: {
     [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
@@ -70,16 +14,33 @@ const chartSetting = {
   },
 };
 
-export default function SaleChart({monthlyOrders}) {
+export default function SaleChart({ monthlyOrders }) {
   const tickPlacement = "middle";
   const tickLabelPlacement = "middle";
-
+  const monthlyOrdersValues = monthlyOrders.map(item => item.monthlyorders);
+  const maxMonthlyOrders = Math.max(...monthlyOrdersValues);
   return (
+
     <div style={{ width: '100%' }}>
+      <Typography variant="h5" component="h2">
+        Monthly Orders of {new Date().getFullYear()}
+      </Typography>
+
       <BarChart
         dataset={monthlyOrders}
         xAxis={[
           { scaleType: 'band', dataKey: 'month', tickPlacement, tickLabelPlacement },
+        ]}
+        yAxis={[
+          {
+            label: 'Orders',
+            colorMap: {
+              type: 'continuous',
+              min: 0,
+              max: maxMonthlyOrders,
+              color: ['red', 'green'],
+            }
+          },
         ]}
         {...chartSetting}
       />

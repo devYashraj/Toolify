@@ -10,6 +10,7 @@ import { LinearProgress } from '@mui/material';
 import axios from 'axios';
 import AdminOrderBody from '../components/AdminOrderBody.jsx'
 import { Pagination, Typography } from '@mui/material';
+import PurchaseBody from '../components/PurchaseBody.jsx';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -32,7 +33,7 @@ function Copyright(props) {
 }
 
 
-export default function Orders() {
+export default function Orders({ status }) {
 
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -42,7 +43,7 @@ export default function Orders() {
             const res = await testAdmin();
             if (res) {
                 const token = localStorage.getItem("adminToken");
-                const response = await axios.get(`${baseUrl}sint/retrieve/allorders`, {
+                const response = await axios.get(`${baseUrl}sint/retrieve/allorders/${status}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -56,7 +57,7 @@ export default function Orders() {
             setLoading(false);
         };
         checkAdmin();
-    }, []);
+    }, [status]);
 
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -81,7 +82,11 @@ export default function Orders() {
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12 }}>
                     {currentOrders.map((order, index) => (
                         <Grid item xs={2} sm={4} md={4} key={index}>
-                            <AdminOrderBody order={order} />
+                            {/* {status === "processing" 
+                            ? <PurchaseBody order={order}/>
+                            : <AdminOrderBody order={order} status={status}/>   
+                            } */}
+                             <AdminOrderBody order={order} status={status}/>
                         </Grid>
                     ))}
                 </Grid>
@@ -90,14 +95,16 @@ export default function Orders() {
                 textAlign: 'center',
                 position: 'sticky',
                 backgroundColor: '#fff',
-                mt:2,
-                bottom:0,
+                mt: 2,
+                bottom: 0,
             }}>
-                <Pagination
-                    count={Math.ceil(allOrders.length / ordersPerPage)}
-                    page={currentPage}
-                    onChange={(event, page) => setCurrentPage(page)}
-                />
+                {allOrders.length === 0
+                    ? <Typography variant='h4'>OOPS! Nothing here</Typography>
+                    : <Pagination
+                        count={Math.ceil(allOrders.length / ordersPerPage)}
+                        page={currentPage}
+                        onChange={(event, page) => setCurrentPage(page)}
+                    />}
             </Box>
         </>
     );

@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import OrderBody from '../components/OrderBody.jsx';
 import { Pagination, Typography } from '@mui/material';
 
-export default function AllOrders() {
+export default function AllOrders({ status }) {
     const [loading, setLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
     const [allOrders, setAllOrders] = useState([]);
@@ -21,7 +21,7 @@ export default function AllOrders() {
             if (res) {
                 const userData = JSON.parse(localStorage.getItem("userData"));
                 const token = localStorage.getItem("token");
-                const response = await axios.get(`${baseUrl}sint/retrieve/allorders/${userData._id}`, {
+                const response = await axios.get(`${baseUrl}sint/retrieve/allorders/${userData._id}/${status}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -35,10 +35,10 @@ export default function AllOrders() {
             setLoading(false);
         };
         checkUser();
-    }, []);
+    }, [status]);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const ordersPerPage = 6;
+    const ordersPerPage = status ==="processing" ? 9 : 6;
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
     const currentOrders = allOrders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -50,15 +50,13 @@ export default function AllOrders() {
     if (!loggedIn) {
         return <SignIn />;
     }
-
     return (
         <>
-            <Navbar action={true} loggedIn={loggedIn} />
-            <Box sx={{ flexGrow: 1, m: 3, mt: 12 }}>
+            <Box sx={{ flexGrow: 1, m: 3, }}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12 }}>
                     {currentOrders.map((order, index) => (
                         <Grid item xs={2} sm={4} md={4} key={index}>
-                            <OrderBody order={order} />
+                            <OrderBody order={order} status={status} />
                         </Grid>
                     ))}
                 </Grid>
@@ -67,14 +65,16 @@ export default function AllOrders() {
                 textAlign: 'center',
                 position: 'sticky',
                 backgroundColor: '#fff',
-                mt:2,
-                bottom:0,
+                mt: 2,
+                bottom: 0,
             }}>
-                <Pagination
+                {allOrders.length === 0 
+                ? <Typography variant='h4'>OOPS! Nothing here</Typography>
+                : <Pagination
                     count={Math.ceil(allOrders.length / ordersPerPage)}
                     page={currentPage}
                     onChange={(event, page) => setCurrentPage(page)}
-                />
+                />}
             </Box>
         </>
     );

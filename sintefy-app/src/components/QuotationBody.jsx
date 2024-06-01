@@ -15,9 +15,10 @@ import Paper from '@mui/material/Paper';
 import { Box } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom'
 
 
-export default function QuotationBody({ quote, quotation, toolName }) {
+export default function QuotationBody({ quote, quotation, toolName, orderId, order, flag}) {
     const [open, setOpen] = React.useState(false);
     const [scroll, setScroll] = React.useState('paper');
     const total = quotation.reduce((t, c) => t + (c.price * c.qty), 0);
@@ -42,10 +43,10 @@ export default function QuotationBody({ quote, quotation, toolName }) {
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
-
+    const navigate = useNavigate();
     return (
         <React.Fragment>
-            <Button disabled={quote} sx={{ marginLeft: 'auto', color:'green'}} onClick={handleClickOpen('paper')}>View Quotation</Button>
+            <Button disabled={quote} sx={{ marginLeft: 'auto', color: 'green' }} onClick={handleClickOpen('paper')}>View Quotation</Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -62,6 +63,7 @@ export default function QuotationBody({ quote, quotation, toolName }) {
                         id="scroll-dialog-description"
                         ref={descriptionElementRef}
                         tabIndex={-1}
+                        component={'span'}
                     >
                         <Box sx={{
                             display: 'flex',
@@ -97,12 +99,27 @@ export default function QuotationBody({ quote, quotation, toolName }) {
                                                     <TableCell align="left">{item.price * item.qty + "/-"}</TableCell>
                                                 </TableRow>
                                             ))}
-                                            <TableCell colSpan={3} align="center">Total</TableCell>
-                                            <TableCell >{"₹ " + total + " /-"}</TableCell>
+                                            <TableRow className='bill'>
+                                                <TableCell colSpan={3} align="center">Total</TableCell>
+                                                <TableCell >{"₹ " + total + " /-"}</TableCell>
+                                            </TableRow>
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
                             }
+                        </Box>
+                        <Box sx={{textAlign:'center'}}>
+                            {!flag && <Button variant="contained" color='primary'
+                                onClick={() => navigate(`../send-po/${orderId}`,{
+                                    state:{
+                                        address:order.address,
+                                        total:total,
+                                        toolName:toolName,
+                                    }
+                                })}
+                            >
+                                Send Purchase Order
+                            </Button>}
                         </Box>
                     </DialogContentText>
                 </DialogContent>

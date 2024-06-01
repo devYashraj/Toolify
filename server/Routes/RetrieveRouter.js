@@ -8,9 +8,9 @@ router.post("/signin", CustomerController.retrieveCustomer);
 
 router.post("/signinadmin", AdminController.retrieveAdmin);
 
-router.get("/allorders/:id", authenticateToken, CustomerController.retrieveAllOrders);
+router.get("/allorders/:id/:status", authenticateToken, CustomerController.retrieveAllOrders);
 
-router.get("/allorders", authenticateToken, AdminController.getAllOrders);
+router.get("/allorders/:status", authenticateToken, AdminController.getAllOrders);
 
 router.get("/allcustomers", authenticateToken, AdminController.getAllCustomers);
 
@@ -20,6 +20,10 @@ router.get("/monthdata", authenticateToken, AdminController.getMonthlyOrderCount
 
 router.get("/salesdata", authenticateToken, AdminController.getSalesData);
 
+router.get("/yearlysales/:year", authenticateToken, AdminController.getCustomerOrdersByYear);
 
+router.get("/purchase/:orderId",authenticateToken,AdminController.getPO);
+
+router.get("/cust-purchase/:orderId",authenticateToken,CustomerController.getPO);
 
 module.exports = router;

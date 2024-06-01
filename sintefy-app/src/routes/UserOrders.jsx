@@ -7,7 +7,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -16,17 +15,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import PersonIcon from '@mui/icons-material/Person';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import AddIcon from '@mui/icons-material/Add';
+import PendingIcon from '@mui/icons-material/Pending';
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import SignIn from '../pages/SignIn';
+import { testUser } from '../components/utils'
+import { LinearProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 
 const drawerWidth = 240;
 
@@ -74,7 +74,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -84,66 +83,76 @@ const darkTheme = createTheme({
   },
 });
 
-export default function PersistentDrawerLeft() {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate();
 
+export default function UserOrders() {
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const checkUser = async () => {
+      const res = await testUser();
+      setLoggedIn(res);
+      setLoading(false);
+    };
+    checkUser();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  }
+
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const actions = [
+    { text: 'Place Order', icon: <AddIcon /> },
+    { text: 'Pending Quotes', icon: <PendingIcon /> },
+    { text: 'Received Quotes', icon: <MoveToInboxIcon /> },
+    { text: 'In Production', icon: <PrecisionManufacturingIcon /> },
+    { text: 'Delivered', icon: <CheckCircleOutlineIcon /> },
+    { text: 'Sign Out', icon: <ExitToAppIcon /> },
+  ]
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    navigate("/");
-  }
-
   const handleDrawerClose = (path) => {
     setOpen(false);
     if (path !== "<") {
-      if (path === "Dashboard")
-        navigate("");
+      if (path === "Place Order")
+        navigate("")
 
       if (path === "Pending Quotes")
-        navigate("pending-quotes");
+        navigate("pending-quotes")
 
-      if (path === "Purchase Orders")
-        navigate("purchase-orders")
+      if (path === "Received Quotes")
+        navigate("received-quotes")
+
+      if (path === "In Production")
+        navigate("in-production")
 
       if (path === "Delivered")
         navigate("delivered")
 
-      if (path === "Customers")
-        navigate("customers")
-
-      if (path === "Reports")
-        navigate("reports")
-
       if(path === "Sign Out")
-        handleLogout();
+          handleLogout();
     }
   };
 
-  const actions1 = [
-    {text:"Dashboard", icon:<BarChartIcon/>},
-    {text:"Pending Quotes", icon:<AddBoxIcon/>},
-    {text:"Purchase Orders", icon:<StorefrontIcon/>},
-    {text:"Delivered", icon:<CheckCircleOutlineIcon/>},
-    
-  ];
+  if (loading) {
+    return <LinearProgress />;
+  }
 
-  const actions2 = [
-    {text:"Customers", icon:<PersonIcon/>},
-    {text:"Reports",icon:<AssessmentIcon/>},
-    {text:"Sign Out",icon:<ExitToAppIcon/>}
-  ]
-
-  
+  if (!loggedIn) {
+    return <SignIn />;
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <ThemeProvider theme={darkTheme}>
+
         <AppBar position="fixed" open={open}>
           <Toolbar>
             <IconButton
@@ -155,24 +164,10 @@ export default function PersistentDrawerLeft() {
             >
               <MenuIcon />
             </IconButton>
-            <PrecisionManufacturingIcon/>
-            {/* <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                  letterSpacing: '.3rem',
-                  color: 'inherit',
-                  textDecoration: 'none',
-                }}
-              >
-                {companyName}
-              </Typography> */}
-            <Typography 
-              variant="h6" 
-              noWrap 
+            <PrecisionManufacturingIcon />
+            <Typography
+              variant="h6"
+              noWrap
               component="div"
               sx={{
                 fontFamily: 'monospace',
@@ -205,22 +200,9 @@ export default function PersistentDrawerLeft() {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
+
         <List>
-          {actions1.map((action, index) => (
-            <ListItem key={index} disablePadding onClick={() => handleDrawerClose(action.text)}>
-              <ListItemButton>
-                <ListItemIcon>
-                  {action.icon}
-                </ListItemIcon>
-                <ListItemText primary={action.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {actions2.map((action, index) => (
+          {actions.map((action, index) => (
             <ListItem key={index} disablePadding onClick={() => handleDrawerClose(action.text)}>
               <ListItemButton>
                 <ListItemIcon>

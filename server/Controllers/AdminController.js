@@ -1,6 +1,7 @@
 const Orders = require('../Models/OrderModel')
 const Admin = require('../Models/AdminModel')
 const Customers = require('../Models/CustomerModel')
+const PurchaseOrder = require('../Models/PurchaseModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -50,7 +51,8 @@ async function getSalesData(req, res) {
     const currentYearPipeline = [
         {
             $match: {
-                $expr: { $eq: [{ $year: "$date" }, currentYear] }
+                $expr: { $eq: [{ $year: "$date" }, currentYear] },
+                status:"delivered"
             }
         },
         {
@@ -65,7 +67,8 @@ async function getSalesData(req, res) {
         {
             $match: {
                 $expr: { $eq: [{ $year: "$date" }, currentYear] },
-                $expr: { $eq: [{ $month: "$date" }, currentMonth] }
+                $expr: { $eq: [{ $month: "$date" }, currentMonth] },
+                status:"delivered"
             }
         },
         {
@@ -79,9 +82,16 @@ async function getSalesData(req, res) {
     try {
         const currentYearTotal = await Orders.aggregate(currentYearPipeline);
         const currentMonthTotal = await Orders.aggregate(currentMonthPipeline);
+
+        let yearTotal = 0, monthTotal = 0;
+        if (currentYearTotal.length !== 0)
+            yearTotal = currentYearTotal[0].totalAmount;
+        if (currentMonthTotal.length !== 0)
+            monthTotal = currentMonthTotal[0].totalAmount
+
         const saleData = {
-            year: currentYearTotal[0].totalAmount,
-            month: currentMonthTotal[0].totalAmount
+            year: yearTotal,
+            month: monthTotal
         }
         res.status(200).json({ saleData });
     }
@@ -91,8 +101,9 @@ async function getSalesData(req, res) {
 }
 
 async function getAllOrders(req, res) {
+    const status = req.params.status;
     try {
-        const allOrders = await Orders.find({}).populate({
+        let allOrders = await Orders.find({ status: status }).populate({
             path: 'custId',
             select: 'companyName name'
         })
@@ -109,7 +120,7 @@ async function updateQuotation(req, res) {
         const { quotation, id, total } = req.body;
         await Orders.updateOne(
             { _id: id },
-            { $set: { quotation: quotation, amount: total } }
+            { $set: { quotation: quotation, amount: total, status: "ready", date: new Date()} }
         ).then(() => res.status(200).json({ message: "quotation sent" }));
     }
     catch (error) {
@@ -142,12 +153,82 @@ async function retrieveAdmin(req, res) {
     }
 }
 
-async function getAllCustomers(req,res){
+async function getAllCustomers(req, res) {
     try {
         const allcustomers = await Customers.find({});
         res.status(200).json({ allcustomers });
     }
     catch (error) {
+        console.log(error);
+    }
+}
+
+async function getCustomerOrdersByYear(req, res) {
+    const year = req.params.year;
+    console.log("here")
+    const pipeline = [
+        {
+            $match: {
+                date: {
+                    $gte: new Date(`${year}-01-01`),
+                    $lt: new Date(`${Number(year) + 1}-01-01`)
+                }
+            }
+        },
+        {
+            $group: {
+                _id: "$custId",
+                totalOrders: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: "customers",
+                localField: "_id",
+                foreignField: "_id",
+                as: "customer"
+            }
+        },
+        {
+            $unwind: "$customer"
+        },
+        {
+            $project: {
+                companyName: "$customer.companyName",
+                totalOrders: 1
+            }
+        }
+    ];
+
+    try {
+        const saleData = await Orders.aggregate(pipeline);
+        res.status(200).json({ saleData });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+async function updatePurchase(req, res) {
+    const { orderId } = req.body;
+    try {
+        await Orders.updateOne(
+            { _id: orderId },
+            { $set: { status: "delivered", date: new Date()} }
+        ).then(() => res.status(200).json({ message: "product delivered" }));
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+async function getPO(req, res) {
+    const orderId = req.params.orderId;
+    try{
+        const order = await PurchaseOrder.findOne({orderId:orderId});
+        res.status(200).json({order});
+    }
+    catch(error){
         console.log(error);
     }
 }
@@ -158,5 +239,8 @@ module.exports = {
     getAllOrders,
     updateQuotation,
     retrieveAdmin,
-    getAllCustomers   
+    getAllCustomers,
+    getCustomerOrdersByYear,
+    updatePurchase,
+    getPO
 }

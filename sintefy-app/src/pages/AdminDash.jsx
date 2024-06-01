@@ -19,7 +19,7 @@ export default function AdminDash() {
         },
         {
             monthlyorders: 0,
-            month: 'Fev',
+            month: 'Feb',
         },
         {
             monthlyorders: 0,
@@ -92,7 +92,6 @@ export default function AdminDash() {
                 if (response.status === 200 && response2.status === 200) {
                     let monthdata = response.data.monthdata;
                     setDataset(loadDataSet(monthdata));
-                    console.log(response2.data.saleData);
                     setSaleData(response2.data.saleData);
                 }
             }

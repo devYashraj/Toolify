@@ -14,4 +14,6 @@ router.post("/signup", CustomerController.createCustomer);
 
 router.post("/sendorder", authenticateToken, upload.single('drawing'), CustomerController.createOrder);
 
+router.post("/sendpo", authenticateToken, CustomerController.createPurchaseOrder)
+
 module.exports = router;

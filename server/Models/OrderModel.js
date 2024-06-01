@@ -14,7 +14,8 @@ const orderSchema = new mongoose.Schema({
     date: { type: Date, required: true },
     filepath: { type: String, required: true },
     quotation: { type: [quotationSchema], default: [{ itemName: "empty", qty: 0, price: 0 }] },
-    amount: { type: Number, default: 0 }
+    amount: { type: Number, default: 0 },
+    status: {type:String, default:"pending"}
 })
 
 const Orders = mongoose.model("Orders", orderSchema)

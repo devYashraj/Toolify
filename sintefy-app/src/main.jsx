@@ -10,8 +10,11 @@ import AllOrders from './pages/AllOrders.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import Admin from './routes/Admin.jsx';
 import AdminDash from './pages/AdminDash.jsx';
+import UserOrders from './routes/UserOrders.jsx';
 import CreateQuotation from './pages/CreateQuotation.jsx';
 import Customers from './pages/Customers.jsx';
+import Reports from './pages/Reports.jsx';
+import CreatePo from './pages/CreatePo.jsx';
 import './index.css'
 
 const router = createBrowserRouter([
@@ -26,18 +29,28 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: 'dashboard',
+        path: '',
         element: <AdminDash/>,
         errorElement: <ErrorPage />
       },
       {
-        path: 'orders',
-        element: <Orders/>,
+        path: 'pending-quotes',
+        element: <Orders status="pending"/>,
         errorElement: <ErrorPage />
       },
       {
-        path: 'orders/sendquote/:id',
+        path: 'sendquote/:id',
         element: <CreateQuotation/>,
+        errorElement: <ErrorPage/>
+      },
+      {
+        path: 'purchase-orders',
+        element: <Orders status="processing"/>,
+        errorElement: <ErrorPage/>
+      },
+      {
+        path: 'delivered',
+        element: <Orders status="delivered"/>,
         errorElement: <ErrorPage/>
       },
       { 
@@ -47,7 +60,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'reports',
-        element: <div>Reports</div>,
+        element: <Reports/>,
         errorElement: <ErrorPage />
       }
     ]
@@ -69,8 +82,40 @@ const router = createBrowserRouter([
   },
   {
     path: '/orders',
-    element: <Orders />,
+    element: <UserOrders/>,
     errorElement: <ErrorPage />,
+    children:[
+      {
+        path: '',
+        element: <SendOrder/>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: 'pending-quotes',
+        element: <AllOrders status="pending"/>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: 'received-quotes',
+        element: <AllOrders status="ready"/>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: 'in-production',
+        element: <AllOrders status="processing"/>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: 'send-po/:id',
+        element: <CreatePo/>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: 'delivered',
+        element: <AllOrders status="delivered"/>,
+        errorElement: <ErrorPage />
+      },
+    ]
   },
   {
     path: "/orders/send",

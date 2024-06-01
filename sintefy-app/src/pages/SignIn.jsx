@@ -36,11 +36,10 @@ export default function SignIn({ admin }) {
       else  
         res = await axios.post(`${baseUrl}sint/retrieve/signin`, data);
       if (res.status === 201) {
-        console.log("Signed In YAY");
         const token = res.data.token;
         if (admin) {
           localStorage.setItem("adminToken", token);
-          navigate("/admin-dash/dashboard");
+          navigate("/admin-dash/");
         }
         else {
           localStorage.setItem("token", token);

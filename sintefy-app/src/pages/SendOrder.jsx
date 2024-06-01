@@ -102,7 +102,6 @@ export default function SendOrder() {
             formData.append('custId', userData._id);
 
             try {
-                console.log("sending request");
                 const res = await axios.post(`${baseUrl}sint/create/sendorder`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -110,7 +109,7 @@ export default function SendOrder() {
                     }
                 });
                 if (res.status === 200) {
-                    navigate('/orders/allorders');
+                    navigate('/orders/pending-quotes');
                 }
             }
             catch (error) {
@@ -140,21 +139,20 @@ export default function SendOrder() {
 
     return (
         <>
-            <Navbar action={true} loggedIn={loggedIn} />
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: 12,
+                            marginTop: 3,
                             marginBottom: 8,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                         }}
                     >
-                        <Typography component="h2" variant="h5">
-                            Enter order details
+                        <Typography component="h4" variant="h6">
+                            Place New Order
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit(submit)} noValidate sx={{ mt: 2 }}>
                             <TextField

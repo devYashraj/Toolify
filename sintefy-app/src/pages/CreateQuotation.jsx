@@ -87,7 +87,7 @@ export default function CreateQuotation() {
                 }
             });
             if (response.status === 200) {
-                navigate("/admin-dash/orders")
+                navigate("/admin-dash/purchase-orders")
             }
         }
         catch (error) {
