@@ -7,11 +7,11 @@ export default defineConfig({
     react(),
     VitePWA({ registerType: 'autoUpdate' })
   ],
-  define:{
-      companyName:'"Sintefy"',
-      companyAddr:'"7, Apple Tool Works, MIDC, Pune"',
-      companyEmail:'"admin@sintefy.com"',
-      companyPhno:'"+91 9876765432"',
-      baseUrl:'"http://localhost:3000/api/"',
+  define: {
+    companyName: '"Toolify"',
+    companyAddr: '"7, Apple Tool Works, MIDC, Pune"',
+    companyEmail: '"admin@toolify.com"',
+    companyPhno: '"+91 1020202020"',
+    baseUrl: '"http://localhost:3000/api/"',
   },
 });

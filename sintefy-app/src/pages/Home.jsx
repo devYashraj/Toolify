@@ -16,16 +16,16 @@ const contacts = ["Ph No: " + companyPhno, "Address: " + companyAddr, "Email: " 
 
 const articles = [
     {
-        question: "What is sintering?",
-        answer: "Sintering, by definition, is a process used in manufacturing to compact solid materials. The resulting product is a harder, stronger, more durable mass due to the high heat and pressure applied forcing the atoms of the material into tighter bonds with each other. Most manufacturing processes use a sintering furnace that can provide the necessary temperatures quickly and accurately. At its most effective, sintering materials reduces porousness while enhancing strength. Powder metallurgy is the specific study of the sintering process using powdered metals.",
+        question: "Who are we?",
+        answer: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem cum vero voluptas, eius ipsum magnam hic quidem doloremque iste deserunt id libero dolor ad repudiandae rem quaerat dolores ipsa illum.Debitis quas quae amet deserunt molestias alias beatae labore quisquam accusantium. Consequatur error quia ex magnam commodi ducimus earum, perferendis quam, voluptas reprehenderit culpa eligendi architecto! Officia nam minus quasi.",
     },
     {
-        question: "What Are Sintering Materials?",
-        answer: "The manufacturing of pottery is the most common use for the sintering process, used the world over. It has been utilized for thousands of years in one form or another to strengthen clay materials. Most people, however, are surprised to learn that powder metallurgy has an equally storied history dating back to the ancient Egyptians over 5,000 years ago.In contemporary manufacturing, metal powders have become more refined. As sintering technologies have improved, the actual sintering materials have also improved. The sintering powders used in the metal manufacturing process — stainless steel, aluminum, nickel, copper and titanium alloy — make up the vast majority of powder metals used in additive manufacturing today.",
+        question: "What we do?",
+        answer: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem cum vero voluptas, eius ipsum magnam hic quidem doloremque iste deserunt id libero dolor ad repudiandae rem quaerat dolores ipsa illum.Debitis quas quae amet deserunt molestias alias beatae labore quisquam accusantium. Consequatur error quia ex magnam commodi ducimus earum, perferendis quam, voluptas reprehenderit culpa eligendi architecto! Officia nam minus quasi.",
     },
     {
-        question: "Why Would You Sinter Metal?",
-        answer: "Powder metallurgy covers a broad range of manufacturing, but what each process shares is the use of sintering powder for metal part fabrication. The benefits of utilizing a furnace or oven — strengthening metal parts through heat and compaction — are core components of additive manufacturing. The sintering process allows us to create components which would decompose otherwise. Because sintering does not require manufacturers to consider solid-liquid phase changes, powder metallurgy is more flexible than conventional manufacturing techniques such as casting, forging and extrusion."
+        question: "What we build?",
+        answer: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem cum vero voluptas, eius ipsum magnam hic quidem doloremque iste deserunt id libero dolor ad repudiandae rem quaerat dolores ipsa illum.Debitis quas quae amet deserunt molestias alias beatae labore quisquam accusantium. Consequatur error quia ex magnam commodi ducimus earum, perferendis quam, voluptas reprehenderit culpa eligendi architecto! Officia nam minus quasi."
     }
 ];
 

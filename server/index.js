@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const CreateRouter = require('./Routes/CreateRouter')
 const RetrieveRouter = require('./Routes/RetrieveRouter');
-const { authenticateToken} = require('./utils');
+const { authenticateToken } = require('./utils');
 const UpdateRouter = require('./Routes/UpdateRouter');
 const path = require('path');
 
@@ -28,7 +28,7 @@ app.use("/api/sint/create", CreateRouter);
 
 app.use("/api/sint/retrieve", RetrieveRouter);
 
-app.use("/api/sint/update",UpdateRouter);
+app.use("/api/sint/update", UpdateRouter);
 
 app.get("/api/verifytoken", authenticateToken, (req, res) => {
     res.status(200).json({ message: "YAY TOKEN Verified. This is a secret" });
@@ -38,9 +38,9 @@ app.use(express.static(path.join(__dirname, '..', 'sintefy-app', 'dist')));
 
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..', 'sintefy-app', 'dist', 'index.html'));
-  });
+});
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log("Listening on Port", PORT);
