@@ -1,6 +1,6 @@
-# Sintefy 
+# Toolify 
 
-A progressive web app for ordering and management of sintered tools built using MERN stack
+A progressive web app for ordering and management of customizable mechanical tools built using MERN stack
 
 <br>
 <h2>User Workflow</h2>
