@@ -34,10 +34,10 @@ app.get("/api/verifytoken", authenticateToken, (req, res) => {
     res.status(200).json({ message: "YAY TOKEN Verified. This is a secret" });
 })
 
-app.use(express.static(path.join(__dirname, '..', 'sintefy-app', 'dist')));
+app.use(express.static(path.join(__dirname, '..', 'toolify-app', 'dist')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'sintefy-app', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '..', 'toolify-app', 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
