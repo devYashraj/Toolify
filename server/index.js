@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const CreateRouter = require('./Routes/CreateRouter')
 const RetrieveRouter = require('./Routes/RetrieveRouter');
-const { authenticateToken } = require('./utils');
+const { authenticateToken, instance } = require('./utils');
 const UpdateRouter = require('./Routes/UpdateRouter');
+const PaymentRouter = require('./Routes/PaymentRouter')
 const path = require('path');
 
 const app = express();
@@ -32,6 +33,12 @@ app.use("/api/sint/update", UpdateRouter);
 
 app.get("/api/verifytoken", authenticateToken, (req, res) => {
     res.status(200).json({ message: "YAY TOKEN Verified. This is a secret" });
+})
+
+app.use("/api/payment", PaymentRouter)
+
+app.get("/api/getrazorkey", (req,res) =>{
+    res.status(200).json({razorKey:process.env.RazorId})
 })
 
 app.use(express.static(path.join(__dirname, '..', 'toolify-app', 'dist')));

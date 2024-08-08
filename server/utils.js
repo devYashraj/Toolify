@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const secretKey = process.env.secretKey;
+const Razorpay = require('razorpay')
 
 const authenticateToken = (req,res,next) =>{
     const authHeader = req.headers['authorization'];
@@ -23,4 +24,9 @@ const authenticateToken = (req,res,next) =>{
     }
 }
 
-module.exports = {authenticateToken};
+const instance = new Razorpay({
+    key_id: process.env.RazorId,
+    key_secret: process.env.RazorSecret
+});
+
+module.exports = {authenticateToken, instance};

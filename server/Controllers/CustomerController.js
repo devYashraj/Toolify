@@ -127,7 +127,11 @@ async function retrieveAllOrders(req, res) {
     const custId = req.params.id;
     const status = req.params.status;
     try {
-        const allOrders = await Orders.find({ custId: custId, status:status}).sort({ date: -1 });
+        let allOrders;
+        if (status === "delivered")
+            allOrders = await Orders.find({ custId: custId, status: { $in: ["delivered", "paid"] } }).sort({ date: -1 });
+        else
+            allOrders = await Orders.find({ custId: custId, status: status }).sort({ date: -1 });
         res.status(200).json({ allOrders });
     }
     catch (error) {
@@ -140,32 +144,32 @@ function downloadDrawing(req, res) {
     res.download(filepath);
 }
 
-async function createPurchaseOrder(req,res){
+async function createPurchaseOrder(req, res) {
     const po = req.body;
-    const {orderId} = po;
+    const { orderId } = po;
     console.log(orderId)
-    try{
+    try {
         await Orders.findOneAndUpdate(
             { _id: orderId },
-            { $set: { status: "processing", date: new Date()} }
+            { $set: { status: "processing", date: new Date() } }
         );
         const newpo = new PurchaseOrder(po);
         await newpo.save()
-        .then(res.status(200).json({msg:"purchase order made"}))
-        .catch()
+            .then(res.status(200).json({ msg: "purchase order made" }))
+            .catch()
     }
-    catch(error){
+    catch (error) {
         console.log(error)
-    }    
+    }
 }
 
 async function getPO(req, res) {
     const orderId = req.params.orderId;
-    try{
-        const order = await PurchaseOrder.findOne({orderId:orderId});
-        res.status(200).json({order});
+    try {
+        const order = await PurchaseOrder.findOne({ orderId: orderId });
+        res.status(200).json({ order });
     }
-    catch(error){
+    catch (error) {
         console.log(error);
     }
 }

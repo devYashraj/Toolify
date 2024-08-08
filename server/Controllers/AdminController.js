@@ -2,6 +2,7 @@ const Orders = require('../Models/OrderModel')
 const Admin = require('../Models/AdminModel')
 const Customers = require('../Models/CustomerModel')
 const PurchaseOrder = require('../Models/PurchaseModel');
+const Payment = require('../Models/PaymentsModel')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -52,7 +53,7 @@ async function getSalesData(req, res) {
         {
             $match: {
                 $expr: { $eq: [{ $year: "$date" }, currentYear] },
-                status:"delivered"
+                status: { $in: ["delivered", "paid"] }
             }
         },
         {
@@ -68,7 +69,7 @@ async function getSalesData(req, res) {
             $match: {
                 $expr: { $eq: [{ $year: "$date" }, currentYear] },
                 $expr: { $eq: [{ $month: "$date" }, currentMonth] },
-                status:"delivered"
+                status: { $in: ["delivered", "paid"] }
             }
         },
         {
@@ -120,7 +121,7 @@ async function updateQuotation(req, res) {
         const { quotation, id, total } = req.body;
         await Orders.updateOne(
             { _id: id },
-            { $set: { quotation: quotation, amount: total, status: "ready", date: new Date()} }
+            { $set: { quotation: quotation, amount: total, status: "ready", date: new Date() } }
         ).then(() => res.status(200).json({ message: "quotation sent" }));
     }
     catch (error) {
@@ -214,7 +215,7 @@ async function updatePurchase(req, res) {
     try {
         await Orders.updateOne(
             { _id: orderId },
-            { $set: { status: "delivered", date: new Date()} }
+            { $set: { status: "delivered", date: new Date() } }
         ).then(() => res.status(200).json({ message: "product delivered" }));
     }
     catch (error) {
@@ -224,12 +225,35 @@ async function updatePurchase(req, res) {
 
 async function getPO(req, res) {
     const orderId = req.params.orderId;
-    try{
-        const order = await PurchaseOrder.findOne({orderId:orderId});
-        res.status(200).json({order});
+    try {
+        const order = await PurchaseOrder.findOne({ orderId: orderId });
+        res.status(200).json({ order });
     }
-    catch(error){
+    catch (error) {
         console.log(error);
+    }
+}
+
+async function updatePayment(req, res) {
+    console.log("HIT 3");
+    const { id } = req.body;
+    const payment = {
+        orderId: id,
+        razorpay_payment_id: req.body.razorpay_payment_id,
+        razorpay_order_id: req.body.razorpay_order_id,
+        razorpay_signature: req.body.razorpay_signature
+    }
+    try {
+        await Orders.updateOne(
+            { _id: id },
+            { $set: { status: "paid" } }
+        ).then(() => console.log("Saving Payment in DB"));
+        const newPayment = new Payment(payment);
+        await newPayment.save()
+            .then(() => res.status(200).json({ msg: "payment saved in db" }))
+    }
+    catch (error) {
+        console.log(error)
     }
 }
 
@@ -242,5 +266,6 @@ module.exports = {
     getAllCustomers,
     getCustomerOrdersByYear,
     updatePurchase,
-    getPO
+    getPO,
+    updatePayment
 }
