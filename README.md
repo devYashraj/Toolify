@@ -4,11 +4,11 @@ A progressive web app for ordering and management of custom mechanical tools bui
 
 
 <br>
-<h2>Payment Gateway Integration<h2/>
+<h2>Payment Gateway Integration</h2>
 
 
 
-https://github.com/user-attachments/assets/ae641e2e-3b95-4bf6-a264-2ec972d47bca
+https://github.com/devYashraj/Toolify/assets/ae641e2e-3b95-4bf6-a264-2ec972d47bca
 
 
 
