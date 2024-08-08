@@ -2,6 +2,16 @@
 A progressive web app for ordering and management of custom mechanical tools built using MERN stack
 
 
+
+<br>
+<h2>Payment Gateway Integration<h2/>
+
+
+
+https://github.com/user-attachments/assets/2e5a4be2-cab7-466b-8f0c-c5281ead7dca
+
+
+
 <br>
 <h2>User Workflow</h2>
 
